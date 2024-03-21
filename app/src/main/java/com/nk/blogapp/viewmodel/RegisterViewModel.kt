@@ -4,40 +4,44 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.nk.blogapp.model.User
-import com.nk.blogapp.utils.RegisterFieldsState
-import com.nk.blogapp.utils.RegisterValidation
-import com.nk.blogapp.utils.Resource
-import com.nk.blogapp.utils.validateEMail
-import com.nk.blogapp.utils.validatePassword
+import com.nk.blogapp.model.UserModel
+import com.nk.blogapp.util.Constants.USER_COLLECTION
+import com.nk.blogapp.util.RegisterFieldsState
+import com.nk.blogapp.util.RegisterValidation
+import com.nk.blogapp.util.Resource
+import com.nk.blogapp.util.validateEMail
+import com.nk.blogapp.util.validatePassword
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
-class RegisterViewModel: ViewModel() {
-    private val firebaseAuth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
-
-    private val _register = MutableStateFlow<Resource<User>>(Resource.Unspecified())
-    val register: Flow<Resource<User>> = _register
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val db: FirebaseFirestore
+) : ViewModel() {
+    private val _register = MutableStateFlow<Resource<UserModel>>(Resource.Unspecified())
+    val register: Flow<Resource<UserModel>> = _register
 
     private val _validation = Channel<RegisterFieldsState>()
     val validation = _validation.receiveAsFlow()
     fun createAccountWithEmailAndPassword(
-        user: User,
+        userModel: UserModel,
         password: String
     ) {
-        if (checkValidation(user, password)) {
+        if (checkValidation(userModel, password)) {
             runBlocking {
                 _register.value = Resource.Loading()
             }
-            firebaseAuth.createUserWithEmailAndPassword(user.email, password)
-                .addOnSuccessListener { it ->
-                    it.user?.let {
-                        saveUserInfo(it.uid, user)
+            firebaseAuth.createUserWithEmailAndPassword(userModel.email, password)
+                .addOnSuccessListener { authResult ->
+                    authResult.user?.let {
+                        saveUserInfo(it.uid, userModel)
                     }
                 }
 
@@ -46,7 +50,7 @@ class RegisterViewModel: ViewModel() {
                 }
         } else {
             val registerFieldsState = RegisterFieldsState(
-                validateEMail(user.email),
+                validateEMail(userModel.email),
                 validatePassword(password)
             )
             viewModelScope.launch {
@@ -55,20 +59,22 @@ class RegisterViewModel: ViewModel() {
         }
     }
 
-    private fun saveUserInfo(userUid: String, user: User) {
+    private fun saveUserInfo(userUid: String, userModel: UserModel) {
         db.collection(USER_COLLECTION)
             .document(userUid)
-            .set(user)
+            .collection("user_data")
+            .document("user_details")
+            .set(userModel)
             .addOnSuccessListener {
-                _register.value = Resource.Success(user)
+                _register.value = Resource.Success(userModel)
             }
             .addOnFailureListener {
                 _register.value = Resource.Error(it.message.toString())
             }
     }
 
-    private fun checkValidation(user: User, password: String): Boolean {
-        val emailValidation = validateEMail(user.email)
+    private fun checkValidation(userModel: UserModel, password: String): Boolean {
+        val emailValidation = validateEMail(userModel.email)
         val passwordValidation = validatePassword(password)
 
         return emailValidation is RegisterValidation.Success &&

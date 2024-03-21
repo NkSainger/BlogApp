@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.nk.blogapp.ui.fragments.WelcomeFragment"
+        android:name="com.nk.blogapp.ui.fragments.loginregister.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.nk.blogapp.ui.fragments.LoginFragment"
+        android:name="com.nk.blogapp.ui.fragments.loginregister.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.nk.blogapp.ui.fragments.RegisterFragment"
+        android:name="com.nk.blogapp.ui.fragments.loginregister.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action

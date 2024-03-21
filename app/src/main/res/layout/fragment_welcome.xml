@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.WelcomeFragment">
+    tools:context=".ui.fragments.loginregister.WelcomeFragment">
 
     <ImageView
         android:id="@+id/imageView"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/julius_sans_one"
         android:text="@string/blogee"
-        android:textSize="40sp"
+        android:textSize="@dimen/_35sdp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -36,7 +36,7 @@
         android:fontFamily="@font/amaranth"
         android:text="Share your story\nwith us"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="@dimen/_25sdp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
@@ -48,6 +48,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/red_border_bg"
         android:text="Login"
+        android:textSize="@dimen/_13sdp"
+        android:textColor="@color/black"
         android:fontFamily="@font/julius_sans_one"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/newHere"
@@ -60,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Here?"
-        android:textSize="20sp"
+        android:textSize="@dimen/_16sdp"
         android:fontFamily="@font/amaranth"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
@@ -74,6 +76,8 @@
         android:background="@drawable/blue_border_bg"
         android:fontFamily="@font/julius_sans_one"
         android:text="Sign Up"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_13sdp"
         android:textStyle="bold"
         android:layout_marginTop="15dp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
@@ -86,8 +90,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/amaranth"
         android:text="@string/developed_by_nikhil_kumar"
-        android:textSize="18sp"
-        android:layout_marginBottom="10dp"
+        android:textSize="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
